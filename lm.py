@@ -37,6 +37,7 @@ import argparse
 import xmlrpclib
 from difflib import SequenceMatcher
 from unicodedata import normalize
+import pyratemp
 
 # windows terminal coloration
 from platform import system
@@ -1404,24 +1405,10 @@ class ListMovies():
                     '*** ' + h['m_short_summary']+'\n').encode('utf-8'))
 
     def html_build(self, files):
-    # Show the list of files, using metadata according to arguments
-
-        cell = u"<td width=200 height=250><a href=\"%(imdb)s\">\
-           %(title)s</a><br> \
-           <font color=%(color)s>%(genre)s<br>\
-           note: %(rating)s, votes: %(votes)s<br>\
-           size: %(size)iMo</font><br>\
-           <a href='%(trailer)s'><img src='%(cover)s' height=150></a><br>\
-           <small>%(file)s</small></td>\n"
-
+    # Build HTML file
+        movies = []
         with codecs.open(self.html_fn,'w','utf-8') as out_file:
-            out_file.write("<table>\n")
-            count = 0
             for f in files:
-                if count % 5 == 0:
-                    if count > 0: out_file.write("</tr>")
-                    out_file.write("<tr height=200>")
-
                 h = self.hash_from_path(f)
                 if h['m_id']:
                     values_dict = {
@@ -1439,11 +1426,11 @@ class ListMovies():
                      'trailer':'http://www.youtube.com/results?search_query='+
                                 alphanum( h['m_title'],'+')+'+trailer'
                                 }
-                    # print values_dict
-                    finalcell = cell % values_dict
-                    out_file.write( finalcell )
-                count += 1
-            out_file.write("</tr></table>")
+                    # add movie values to the collection
+                    movies.append(values_dict)
+            t = pyratemp.Template(filename="lm.tmpl")
+            result = t(movies=movies)
+            out_file.write(result.encode("ascii", 'xmlcharrefreplace'))
 
     def html_show(self):
         webbrowser.open_new_tab( "file://%s" % self.html_fn )
