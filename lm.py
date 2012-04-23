@@ -35,6 +35,7 @@ import logging
 import cPickle
 import argparse
 import xmlrpclib
+import datetime
 from difflib import SequenceMatcher
 from unicodedata import normalize
 import pyratemp
@@ -295,6 +296,10 @@ def decode_filter_phrase( filter_phrase ):
 
     return result
 
+def modification_date(filename):
+    #retrieve modification date from file
+    t = os.path.getmtime(filename)
+    return datetime.datetime.fromtimestamp(t)
 
 
 # ********** Exceptions ******************************************************
@@ -1424,7 +1429,8 @@ class ListMovies():
                         'cover': h['m_cover'],
                         'genre': ', '.join(h['m_genre'][0:2]),
                      'trailer':'http://www.youtube.com/results?search_query='+
-                                alphanum( h['m_title'],'+')+'+trailer'
+                                alphanum( h['m_title'],'+')+'+trailer',
+                        'modDate' : modification_date(f).strftime('%Y-%m-%d')
                                 }
                     # add movie values to the collection
                     movies.append(values_dict)

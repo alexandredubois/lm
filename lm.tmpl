@@ -64,7 +64,7 @@
           </div>
         </div>
         <div class="container">
-                <a id="hideButton" href="#" class="btn">Hide pictures</a>
+                <a id="hideButton" href="#" class="btn">Show/Hide covers</a>
                 <table id="moviesTable" class="table table-striped">
                   <thead>
                     <tr>
@@ -73,6 +73,7 @@
                       <th>Title</th>
                       <th>Rating (Votes)</th>
                       <th>File info</th>
+                      <th>Date</th>
                       <th>Links</th>
                     </tr>
                   </thead>
@@ -84,6 +85,7 @@
                             <td>@!movie["title"]!@</td>
                             <td>@!movie["rating"]!@ (@!movie["votes"]!@)</td>
                             <td>@!movie["size"]!@MB</td>
+                            <td>@!movie["modDate"]!@</td>
                             <td><a class="btn btn-warning btn-mini" href="@!movie["imdb"]!@" target="_blank">IMDB</a></td>
                         </tr>
                     <!--(end)-->      
