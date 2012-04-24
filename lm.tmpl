@@ -86,7 +86,10 @@
                             <td>@!movie["rating"]!@ (@!movie["votes"]!@)</td>
                             <td>@!movie["size"]!@MB</td>
                             <td>@!movie["modDate"]!@</td>
-                            <td><a class="btn btn-warning btn-mini" href="@!movie["imdb"]!@" target="_blank">IMDB</a></td>
+                            <td>
+                                <a class="btn btn-warning btn-mini" href="http://www.imdb.com/title/tt@!movie["imdb"]!@" target="_blank">IMDB</a>
+                                <a class="btn btn-info btn-mini" href="http://www.opensubtitles.org/en/search/sublanguageid-all/imdbid-@!movie["imdb"]!@" target="_blank">ST</a>
+                            </td>
                         </tr>
                     <!--(end)-->      
                   </tbody>

@@ -1417,7 +1417,7 @@ class ListMovies():
                 h = self.hash_from_path(f)
                 if h['m_id']:
                     values_dict = {
-                        'imdb' :'http://www.imdb.com/title/tt'+h['m_id'],
+                        'imdb' : h['m_id'],
                         'file' : os.path.basename(f)[0:20],
                         'size' : round(h['bytesize']/(1024*1024),1)\
                         if os.path.exists(f) else 0,
@@ -1434,8 +1434,12 @@ class ListMovies():
                                 }
                     # add movie values to the collection
                     movies.append(values_dict)
+            
+            #Load and fill the template
             t = pyratemp.Template(filename="lm.tmpl")
             result = t(movies=movies)
+            
+            #Write HTML file to its destination
             out_file.write(result.encode("ascii", 'xmlcharrefreplace'))
 
     def html_show(self):
