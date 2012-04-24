@@ -21,6 +21,12 @@
           .movieCoverPic {
             display : none;
           }
+          .movieSummary{
+            display : none;
+            padding-top : 10px;
+            color : #777777;
+            text-align : justify;
+          }
         </style>    
         <link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
         <link href="./bootstrap/css/DT_bootstrap.css" rel="stylesheet">    
@@ -35,7 +41,7 @@
             $(document).ready(function() 
                 {
                     $("#hideButton").click(function ( event ) {
-                        $(".movieCoverPic").toggle();
+                        $(".movieCoverPic, .movieSummary").toggle();
                     });
                 } 
             );
@@ -62,7 +68,7 @@
           </div>
         </div>
         <div class="container">
-                <a id="hideButton" href="#" class="btn">Show/Hide covers</a>
+                <a id="hideButton" href="#" class="btn">Show/Hide details</a>
                 <table id="moviesTable" class="table table-striped table-bordered">
                   <thead>
                     <tr>
@@ -80,8 +86,15 @@
                     <!--(for i,movie in enumerate(movies))-->
                         <tr>
                             <td>@!i+1!@</td>
-                            <td class="movieCoverCell"><div class="movieCoverPic"><img src="@!movie["cover"]!@"/></div></td>
-                            <td>@!movie["title"]!@</td>
+                            <td class="movieCoverCell">
+                                <div class="movieCoverPic">
+                                    <img src="@!movie["cover"]!@"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="movieTitle">@!movie["title"]!@</div>
+                                <div class="movieSummary">@!movie["summary"]!@</div>
+                            </td>
                             <td>@!movie["genre"]!@</td>
                             <td>@!movie["rating"]!@ (@!movie["votes"]!@)</td>
                             <td>@!movie["size"]!@MB</td>

@@ -1430,7 +1430,8 @@ class ListMovies():
                         'genre': ', '.join(h['m_genre'][0:2]),
                      'trailer':'http://www.youtube.com/results?search_query='+
                                 alphanum( h['m_title'],'+')+'+trailer',
-                        'modDate' : modification_date(f).strftime('%Y-%m-%d')
+                        'modDate' : modification_date(f).strftime('%Y-%m-%d'),
+                        'summary' : h['m_short_summary']
                                 }
                     # add movie values to the collection
                     movies.append(values_dict)
