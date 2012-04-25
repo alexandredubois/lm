@@ -92,14 +92,16 @@
                             <td>@!i+1!@</td>
                             <td class="movieCoverCell">
                                 <div class="movieCoverPic">
-                                    <img src="@!movie["cover"]!@"/>
+                                    <!--(if len(movie["cover"]) > 0)-->
+                                        <img alt="@!movie["title"]!@" src="@!movie["cover"]!@"/>
+                                    <!--(end)-->
                                 </div>
                             </td>
                             <td>
                                 <div class="movieTitle">@!movie["title"]!@</div>
                                 <div class="movieCountries">
                                     <!--(for country in movie["countries"])-->
-                                        <img src="./ressources/img/flags/@!country.lower()!@.png"/>
+                                        <img alt="@!country["name"]!@" src="./ressources/img/flags/@!country["isoCode"].lower()!@.png"/>
                                     <!--(end)-->
                                 </div>
                                 <div class="movieSummary">@!movie["summary"]!@</div>

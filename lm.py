@@ -307,7 +307,11 @@ def get_country_iso_codes(countries):
     isoCodes = []
     for country in countries:
         if(len(country)>0 and country.upper() in COUNTRY):
-            isoCodes.append(COUNTRY[country.upper()])
+            country_infos = {
+                        'name' : country,
+                        'isoCode' : COUNTRY[country.upper()]
+                        }
+            isoCodes.append(country_infos)
         else:
             logger.info("No isoCode found for this country : %s" % country)
     return isoCodes
