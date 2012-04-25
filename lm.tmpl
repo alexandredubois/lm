@@ -21,6 +21,10 @@
           .movieCoverPic {
             display : none;
           }
+          .movieTitle, .movieCountries {
+            display : inline;
+            vertical-align: middle;
+          }
           .movieSummary{
             display : none;
             padding-top : 10px;
@@ -93,6 +97,11 @@
                             </td>
                             <td>
                                 <div class="movieTitle">@!movie["title"]!@</div>
+                                <div class="movieCountries">
+                                    <!--(for country in movie["countries"])-->
+                                        <img src="./ressources/img/flags/@!country.lower()!@.png"/>
+                                    <!--(end)-->
+                                </div>
                                 <div class="movieSummary">@!movie["summary"]!@</div>
                             </td>
                             <td>@!movie["genre"]!@</td>

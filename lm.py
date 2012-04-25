@@ -300,6 +300,18 @@ def modification_date(filename):
     #retrieve modification date from file
     t = os.path.getmtime(filename)
     return datetime.datetime.fromtimestamp(t)
+    
+def get_country_iso_codes(countries):
+    #retrieve country iso codes from country names
+    from isoCountryCodes import COUNTRY #Dictionnary with name <-> isoCodes
+    isoCodes = []
+    for country in countries:
+        if(len(country)>0 and country.upper() in COUNTRY):
+            isoCodes.append(COUNTRY[country.upper()])
+        else:
+            logger.info("No isoCode found for this country : %s" % country)
+    return isoCodes
+        
 
 
 # ********** Exceptions ******************************************************
@@ -1431,7 +1443,8 @@ class ListMovies():
                      'trailer':'http://www.youtube.com/results?search_query='+
                                 alphanum( h['m_title'],'+')+'+trailer',
                         'modDate' : modification_date(f).strftime('%Y-%m-%d'),
-                        'summary' : h['m_short_summary']
+                        'summary' : h['m_short_summary'],
+                        'countries' : get_country_iso_codes(h['m_countries'])
                                 }
                     # add movie values to the collection
                     movies.append(values_dict)
