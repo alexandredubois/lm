@@ -21,9 +21,15 @@
           .movieCoverPic {
             display : none;
           }
-          .movieTitle, .movieCountries {
+          .movieTitle, .movieCountries, .download {
             display : inline;
             vertical-align: middle;
+          }
+          
+          .download {
+            text-align: right;
+            display: block;
+            float: right;
           }
           .movieSummary{
             display : none;
@@ -103,6 +109,17 @@
                                     <!--(for country in movie["countries"])-->
                                         <img alt="@!country["name"]!@" src="./ressources/img/flags/@!country["isoCode"].lower()!@.png"/>
                                     <!--(end)-->
+                                    <!--(if movie["srtPath"])-->
+                                        <span class="label">srt</span>
+                                    <!--(end)-->
+                                </div>
+                                <div class="download">
+                                    <!--(if movie["file"])-->
+                                        <a href="@!movie["file"]!@" target="_blank" class="btn btn-mini btn-success"><i class="icon-download icon-white"></i>&nbsp;DOWNLOAD</a>
+                                    <!--(end)-->
+                                    <!--(if movie["srtPath"])-->
+                                        #!<!--<a href="@!movie["srtPath"]!@" target="_blank" class="btn btn-mini btn-success"><i class="icon-download icon-white"></i>&nbsp;SRT</a>-->!#
+                                    <!--(end)--> 
                                 </div>
                                 <div class="movieSummary">@!movie["summary"]!@</div>
                             </td>
@@ -111,8 +128,8 @@
                             <td>@!movie["size"]!@MB</td>
                             <td>@!movie["modDate"]!@</td>
                             <td>
-                                <a class="btn btn-warning btn-mini" href="http://www.imdb.com/title/tt@!movie["imdb"]!@" target="_blank">IMDB</a>
-                                <a class="btn btn-info btn-mini" href="http://www.opensubtitles.org/en/search/sublanguageid-all/imdbid-@!movie["imdb"]!@" target="_blank">ST</a>
+                                <a class="btn btn-mini" href="http://www.imdb.com/title/tt@!movie["imdb"]!@" target="_blank">IMDB</a>
+                                <a class="btn btn-mini" href="http://www.opensubtitles.org/en/search/sublanguageid-all/imdbid-@!movie["imdb"]!@" target="_blank">ST</a>
                             </td>
                         </tr>
                     <!--(end)-->      

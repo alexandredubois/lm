@@ -315,6 +315,16 @@ def get_country_iso_codes(countries):
         else:
             logger.info("No isoCode found for this country : %s" % country)
     return isoCodes
+
+def find_subtitles_path(moviePath):
+    #check if a srt file with the same name is present
+    if len(moviePath) > 0:
+        rootPath, ext = os.path.splitext(moviePath)
+        srtPath =  rootPath + ".srt"
+        if os.path.exists(srtPath):
+            return srtPath
+    return None
+        
         
 
 
@@ -1438,6 +1448,7 @@ class ListMovies():
                         'size' : round(h['bytesize']/(1024*1024),1)\
                         if os.path.exists(f) else 0,
                         'title': h['m_title'],
+                        'srtPath' : find_subtitles_path(f),
                         'color': '#FF3333' if h['g_unsure'] else '#808080',
                         'rating' : str(h['m_rating']) or 'None',
                         'votes': str(round(h['m_votes']/1000,1))+'K' if \
