@@ -28,6 +28,7 @@ import time
 import imdb
 import zlib
 import struct
+import shutil
 import base64
 import codecs
 import locale
@@ -207,6 +208,8 @@ def parse_arguments():
             help="Show a sumup html page, with covers and usefull links")
     parser.add_argument('--html-build', action="store_true",
             help="Build HTML sumup page without display")
+    parser.add_argument('--export',
+            help="Path where the html file and its ressources will be exported")
     parser.add_argument( 'files', nargs="*",
             help="media files to check, by default looks at current dir")
     parser.add_argument('--reset', action="store_true",
@@ -410,7 +413,8 @@ class ListMovies():
         cache_dir = os.path.expanduser('~/.lm')
         if not os.path.exists(cache_dir):
             os.makedirs(cache_dir)
-
+ 
+        self.lm_dir_path = os.path.abspath(os.path.dirname(sys.argv[0]))
         self.cache_path_fn = os.path.join( cache_dir, 'cache_path')
         self.cache_hash_fn = os.path.join( cache_dir, 'cache_hash')
 
@@ -1465,7 +1469,8 @@ class ListMovies():
                     movies.append(values_dict)
             
             #Load and fill the template
-            t = pyratemp.Template(filename="lm.tmpl")
+            templatePath = os.path.join(self.lm_dir_path,"lm.tmpl")
+            t = pyratemp.Template(filename=templatePath)
             result = t(movies=movies)
             
             #Write HTML file to its destination
@@ -1473,6 +1478,28 @@ class ListMovies():
 
     def html_show(self):
         webbrowser.open_new_tab( "file://%s" % self.html_fn )
+    
+    def html_export(self, path):
+        #Copy the HTML file and its ressources to the specified location
+        if os.path.isdir(path):
+            #Copy the HTML file
+            try:
+                htmlPage = os.path.join(path, 'index.html')
+                shutil.copy(self.html_fn, htmlPage)
+            except Exception:
+                print "Unable to export the HTML file to its final location" 
+                pass
+            #Copy the associated ressources
+            try:
+                ressourcesPath = os.path.join(self.lm_dir_path,"ressources")
+                print ressourcesPath 
+                shutil.copytree(ressourcesPath, os.path.join(path,"ressources"))
+            except Exception:
+                print "Unable to export the ressources directory to its final location" 
+                pass
+        else:
+            print "%s is not a directory" % path
+        
 
     def imdb_show(self, files):
         for f in files:
@@ -1538,7 +1565,9 @@ if __name__ == "__main__":
 
     elif options.show or options.html_build:
         LM.html_build(files)
-        if options.show:
+        if options.export:
+            LM.html_export(options.export) 
+        elif options.show:
             LM.html_show()
 
     elif options.show_imdb:
