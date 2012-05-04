@@ -1471,7 +1471,7 @@ class ListMovies():
             #Load and fill the template
             templatePath = os.path.join(self.lm_dir_path,"lm.tmpl")
             t = pyratemp.Template(filename=templatePath)
-            result = t(movies=movies)
+            result = t(movies=movies, gendate=time.strftime("%b %d %Y %H:%M:%S"))
             
             #Write HTML file to its destination
             out_file.write(result.encode("ascii", 'xmlcharrefreplace'))
@@ -1492,7 +1492,6 @@ class ListMovies():
             #Copy the associated ressources
             try:
                 ressourcesPath = os.path.join(self.lm_dir_path,"ressources")
-                print ressourcesPath 
                 shutil.copytree(ressourcesPath, os.path.join(path,"ressources"))
             except Exception:
                 print "Unable to export the ressources directory to its final location" 
