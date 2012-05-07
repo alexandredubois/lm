@@ -21,9 +21,17 @@
           .movieCoverPic {
             display : none;
           }
+          .movieCoverPic img{
+            width : 100px;
+          }
           .movieTitle, .movieCountries, .download {
             display : inline;
             vertical-align: middle;
+          }
+          
+          .movieActions {
+            width : 80px;
+            text-align : center;
           }
           
           .download {
@@ -104,7 +112,7 @@
                             <td class="movieCoverCell">
                                 <div class="movieCoverPic">
                                     <!--(if len(movie["cover"]) > 0)-->
-                                        <img alt="@!movie["title"]!@" src="@!movie["cover"]!@"/>
+                                        <img alt="@!movie["title"]!@" src="./covers/@!movie["imdb"]!@.jpg"/>
                                     <!--(end)-->
                                 </div>
                             </td>
@@ -132,7 +140,7 @@
                             <td>@!movie["rating"]!@ (@!movie["votes"]!@)</td>
                             <td>@!movie["size"]!@MB</td>
                             <td>@!movie["modDate"]!@</td>
-                            <td>
+                            <td class="movieActions">
                                 <a class="btn btn-mini" href="http://www.imdb.com/title/tt@!movie["imdb"]!@" target="_blank">IMDB</a>
                                 <a class="btn btn-mini" href="http://www.opensubtitles.org/en/search/sublanguageid-all/imdbid-@!movie["imdb"]!@" target="_blank">ST</a>
                             </td>

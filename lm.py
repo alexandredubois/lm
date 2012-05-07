@@ -33,6 +33,7 @@ import base64
 import codecs
 import locale
 import logging
+import urllib2
 import cPickle
 import argparse
 import xmlrpclib
@@ -417,6 +418,10 @@ class ListMovies():
         self.lm_dir_path = os.path.abspath(os.path.dirname(sys.argv[0]))
         self.cache_path_fn = os.path.join( cache_dir, 'cache_path')
         self.cache_hash_fn = os.path.join( cache_dir, 'cache_hash')
+        self.cache_covers_path = os.path.join( cache_dir, 'cache_covers')
+        
+        if not os.path.exists(self.cache_covers_path):
+            os.makedirs(self.cache_covers_path)
 
         # html output sumup file
         self.html_fn  = os.path.join( cache_dir, 'html_sumup.html')
@@ -1465,6 +1470,8 @@ class ListMovies():
                         'summary' : h['m_short_summary'],
                         'countries' : get_country_iso_codes(h['m_countries'])
                                 }
+                    #add cover to cache if necessary
+                    self.cache_cover(values_dict['cover'],values_dict['imdb'])
                     # add movie values to the collection
                     movies.append(values_dict)
             
@@ -1492,13 +1499,38 @@ class ListMovies():
             #Copy the associated ressources
             try:
                 ressourcesPath = os.path.join(self.lm_dir_path,"ressources")
-                shutil.copytree(ressourcesPath, os.path.join(path,"ressources"))
+                ressources_target_path = os.path.join(path,"ressources")
+                covers_target_path = os.path.join(path,"covers")
+                
+                #Associated ressources (css, js, flag images)
+                if os.path.exists(ressources_target_path):
+                    shutil.rmtree(ressources_target_path)
+                shutil.copytree(ressourcesPath, ressources_target_path)
+                
+                #Movie covers
+                if os.path.exists(covers_target_path):
+                    shutil.rmtree(covers_target_path)
+                shutil.copytree(self.cache_covers_path, covers_target_path)
             except Exception:
                 print "Unable to export the ressources directory to its final location" 
                 pass
         else:
             print "%s is not a directory" % path
-        
+            
+    def cache_cover(self, cover_url, imdb_id):
+        #Save the movie cover to avoid loading problem from IMDB
+        try:
+            if cover_url and imdb_id:
+                cover_path = os.path.join(self.cache_covers_path,"{0}.jpg".format(imdb_id))
+                if not os.path.exists( cover_path ):
+                    u = urllib2.urlopen(cover_url)
+                    localFile = open(cover_path, 'w')
+                    localFile.write(u.read())
+                    localFile.close()
+                    self.log.info("New cover downloaded : %s" % cover_path)
+        except Exception:
+                self.log.error( "Unable download and add the cover to the cache")
+                pass
 
     def imdb_show(self, files):
         for f in files:
