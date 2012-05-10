@@ -1,5 +1,6 @@
-# lm v0.2
+# lm v0.3
 
+> Copyright (C) 2012  Alexandre Dubois  (dev@alexandredubois.com)
 > Copyright (C) 2012  Guillaume Garchery  (polluxxx@gmail.com)  
 > Copyright (C) 2010  Jérôme Poisson  (goffi@goffi.org)
 
@@ -62,10 +63,13 @@ through file hash, or non original titles.
 will list all your action movies
 
 `python lm.py YOU_DIR_TO_SCAN -s -a`
-will display in an HTML page, your movies sorted alphabetically
+will build an HTML page containig your movies sorted alphabetically and display it into your default web browser 
 
 `python lm.py YOU_DIR_TO_SCAN --download ger`
 will download the 3 best subtitles match, for every movie in you dir
+
+`python lm.py YOU_DIR_TO_SCAN -a --html-build --export WWW_APACHE_DIR`
+will build an HTML page with your movies sorted alphabetically and will copy it into your www apache directory
 
 
 ## 1. INSTALLATION
@@ -168,6 +172,8 @@ command: `lm.py YOUR_DIR -f @unsure --confirm`
     -S : will open you web browser and display results with rates, cover,
          links to trailers, and IMDb movie page.
     -s : will open all IMDb related pages (don't use with a lot a files)
+    --html-build : will build an HTML catalog but without launching your web browser
+    --export : allow to defin a target directory for the HTML output
 
 
 ### 2.4 Filters
@@ -249,8 +255,17 @@ You can participate by uploading some.
 
 > Creator: goffi@goffi.org (http://www.goffi.org)  
 v0.2 : polluxxx@gmail.com (http://redrises.blogspot.com)
+v0.3 : dev@alexandredubois.com (http://www.alexandredubois.com)
 
 ## 5. CHANGES LOG
+
+What's new in version 0.3:
++ better movie hash calculation (faster and supported by more CPU architectures, as the Readynas SParc processor ;)
++ ability to export the HTML output to a specified directory with the `--export` option
++ the HTML output is now built from a readable template and use web controls powered by Twitter Bootstrap and Datatables.net
++ the HTML output is more detailed with movie description, country flag icons, file creation date... and more...
++ IMDB covers are locally cached !
++ Cron template file added, which allow for example to rebuild the movie index every night if you wish so ! 
 
 What's new in version 0.2:
 + Add of logging module (--debug parameter). If activated, creates a log file
