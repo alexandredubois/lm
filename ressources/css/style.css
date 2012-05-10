@@ -1,0 +1,45 @@
+body {
+  padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+.movieCoverCell {
+  width : 140px;
+}
+.movieCoverPic {
+  display : none;
+}
+.movieCoverPic img{
+  width : 100px;
+}
+.movieTitle, .movieCountries, .download {
+  display : inline;
+  vertical-align: middle;
+}
+
+.movieActions {
+  width : 80px;
+  text-align : center;
+}
+
+.download {
+  text-align: right;
+  display: block;
+  float: right;
+}
+.movieSummary{
+  display : none;
+  padding-top : 10px;
+  color : #777777;
+  text-align : justify;
+}
+.footer{
+  text-align:center;
+  font-size:10px;
+  color:#999;
+}
+
+.dropdown-menu {
+  min-width: 100px;
+}
+.dropdown-menu li {
+  text-align: left;
+}
