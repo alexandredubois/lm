@@ -114,6 +114,7 @@ def filelist( dir, recurs=True, *ext):
 
 # opensubtitle hash function
 def hashFile(name):
+    """ Compute the OpenSubtitle hash for the specified file """
     try:
 
         longlongformat = 'Q'  # unsigned long long little endian
@@ -139,8 +140,8 @@ def hashFile(name):
         hash&= 0xFFFFFFFFFFFFFFFF
 
         f.close() 
-        returnedhash =  "%016x" % hash 
-        return returnedhash
+        returned_hash =  "%016x" % hash 
+        return returned_hash
     except(IOError):
             return "IOError"
 
@@ -256,7 +257,7 @@ def parse_arguments():
     return( (options, args) )
 
 def decode_filter_phrase( filter_phrase ):
-    # transforms the filter param argument to a more convenient form
+    """ transforms the filter param argument to a more convenient form """
     result = {}
     filter_types = {    'genre':'genre',
                      'director':'director',
@@ -301,30 +302,30 @@ def decode_filter_phrase( filter_phrase ):
     return result
 
 def modification_date(filename):
-    #retrieve modification date from file
+    """ retrieve modification date from file """
     t = os.path.getmtime(filename)
     return datetime.datetime.fromtimestamp(t)
     
 def get_country_iso_codes(countries):
-    #retrieve country iso codes from country names
-    from modules.isocountrycodes import COUNTRY #Dictionnary with name <-> isoCodes
-    isoCodes = []
+    """ retrieve country iso codes from country names """
+    from modules.isocountrycodes import countries as country_codes #Dictionnary with name <-> isoCodes
+    iso_codes = []
     for country in countries:
-        if(len(country)>0 and country.upper() in COUNTRY):
+        if(country and country.upper() in country_codes):
             country_infos = {
                         'name' : country,
-                        'isoCode' : COUNTRY[country.upper()]
+                        'iso_code' : country_codes[country.upper()]
                         }
-            isoCodes.append(country_infos)
+            iso_codes.append(country_infos)
         else:
-            logger.info("No isoCode found for this country : %s" % country)
-    return isoCodes
+            logger.info("No iso code found for this country : %s" % country)
+    return iso_codes
 
 def find_subtitles_path(moviePath):
-    #check if a srt file with the same name is present
-    if len(moviePath) > 0:
+    """ check if a srt file with the same name is present """
+    if moviePath:
         rootPath, ext = os.path.splitext(moviePath)
-        srtPath =  rootPath + ".srt"
+        srtPath =  "".join([rootPath,'.srt'])
         if os.path.exists(srtPath):
             return srtPath
     return None
@@ -357,8 +358,8 @@ class LoginError(Exception):
 class OpensubtitlesError(Exception):
     pass
 
-# fixed keys dictionary, to avoid error on small "key/value" data storage
 class store(dict):
+    """fixed keys dictionary, to avoid error on small "key/value" data storage"""
 
     def __init__(self,*args,**kwargs):
 
@@ -636,9 +637,10 @@ class ListMovies():
         self.save_cache()
 
     def update_cache_hash_opensubtitles(self):
-    # Update cache_hash opensubtitles info
-    # For movies which hash was not found in opensubtitles, will be tried
-    # again only 6 hours after
+        """Update cache_hash opensubtitles info
+        For movies which hash was not found in opensubtitles, will be tried
+        again only 6 hours after
+        """
 
         cache = self.cache_hash
         hashs = [ h for h in cache.keys() if h and
@@ -738,12 +740,12 @@ class ListMovies():
             return(data)
 
     def path_from_hash(self, cur_hash):
-    # Returns the lastest modified file in cache_path pointing to this hash
-    # a path points to 1 hash only
-    # an hash can be pointed by unlimited path
-    # [cache_path] * ----> 1 [cache_hash]
-    # return a dictionary, 'path', 'cache_time', 'file_time'
-
+        """Returns the lastest modified file in cache_path pointing to this hash
+                a path points to 1 hash only
+                an hash can be pointed by unlimited path
+                [cache_path] * ----> 1 [cache_hash]
+                return a dictionary, 'path', 'cache_time', 'file_time'
+        """
         path = [ (k,v['last_update']) for k,v in self.cache_path.iteritems() \
                 if v['hash'] == cur_hash and os.path.exists(k) ]
 
@@ -1518,7 +1520,7 @@ class ListMovies():
             print "%s is not a directory" % path
             
     def cache_cover(self, cover_url, imdb_id):
-        #Save the movie cover to avoid loading problem from IMDB
+        """Save the movie cover to avoid loading problem from IMDB"""
         try:
             if cover_url and imdb_id:
                 cover_path = os.path.join(self.cache_covers_path,"{0}.jpg".format(imdb_id))

@@ -30,14 +30,14 @@
 # USAGE:
 # ======
 #   * Import in your python script:
-#   from IsoCountryCodes import COUNTRY
+#   from IsoCountryCodes import countries
 
 #   * Specify a country name (in capitals) as dictionary key and get 
 #     the 2-digit country code:
-#   >>> COUNTRY["GREECE"]
+#   >>> countries["GREECE"]
 #   'GR'
 
-COUNTRY = {
+countries = {
 	"AFGHANISTAN":"AF",
 	"ALAND ISLANDS":"AX",
 	"ALBANIA":"AL",
