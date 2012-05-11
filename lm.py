@@ -40,7 +40,7 @@ import xmlrpclib
 import datetime
 from difflib import SequenceMatcher
 from unicodedata import normalize
-import pyratemp
+from modules import pyratemp
 
 # windows terminal coloration
 from platform import system
@@ -307,7 +307,7 @@ def modification_date(filename):
     
 def get_country_iso_codes(countries):
     #retrieve country iso codes from country names
-    from isoCountryCodes import COUNTRY #Dictionnary with name <-> isoCodes
+    from modules.isocountrycodes import COUNTRY #Dictionnary with name <-> isoCodes
     isoCodes = []
     for country in countries:
         if(len(country)>0 and country.upper() in COUNTRY):
@@ -1476,7 +1476,7 @@ class ListMovies():
                     movies.append(values_dict)
             
             #Load and fill the template
-            templatePath = os.path.join(self.lm_dir_path,"lm.tmpl")
+            templatePath = os.path.join(self.lm_dir_path,"templates", "lm.tmpl")
             t = pyratemp.Template(filename=templatePath)
             result = t(movies=movies, gendate=time.strftime("%b %d %Y %H:%M:%S"))
             
