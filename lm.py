@@ -38,9 +38,11 @@ import cPickle
 import argparse
 import xmlrpclib
 import datetime
+import ConfigParser
 from difflib import SequenceMatcher
 from unicodedata import normalize
 from modules import pyratemp
+
 
 # windows terminal coloration
 from platform import system
@@ -423,6 +425,19 @@ class ListMovies():
         
         if not os.path.exists(self.cache_covers_path):
             os.makedirs(self.cache_covers_path)
+
+        #Lecture de la config
+        config_path = os.path.join(self.lm_dir_path,"config.ini")
+
+        if os.path.exists(os.path.join(self.lm_dir_path,"config.ini")):
+            config = ConfigParser.ConfigParser()
+            config.read(config_path)
+            self.conf_path_renaming_enabled = config.getboolean( "RenamingPath", "Enable")
+            self.conf_path_renaming_old_path = config.get("RenamingPath", "OldPath")
+            self.conf_path_renaming_new_path = config.get("RenamingPath", "NewPath")
+        else:
+            self.log.debug("Config file not found")
+            self.conf_path_renaming_enabled = False
 
         # html output sumup file
         self.html_fn  = os.path.join( cache_dir, 'html_sumup.html')
@@ -1459,7 +1474,8 @@ class ListMovies():
                         'size' : round(h['bytesize']/(1024*1024),1)\
                         if os.path.exists(f) else 0,
                         'title': h['m_title'],
-                        'srtPath' : find_subtitles_path(f),
+                        'moviePath' : LM.adapt_link_url(f),
+                        'srtPath' : LM.adapt_link_url(find_subtitles_path(f)),
                         'color': '#FF3333' if h['g_unsure'] else '#808080',
                         'rating' : str(h['m_rating']) or 'None',
                         'votes': str(round(h['m_votes']/1000,1))+'K' if \
@@ -1534,6 +1550,13 @@ class ListMovies():
                 self.log.error( "Unable download and add the cover to the cache")
                 pass
 
+    def adapt_link_url(self, original_link_url):
+        """Replace a specific part of the link according the config file content"""
+        if self.conf_path_renaming_enabled and original_link_url :
+            return original_link_url.replace(self.conf_path_renaming_old_path, self.conf_path_renaming_new_path)
+        else:
+            return original_link_url
+
     def imdb_show(self, files):
         for f in files:
             h = self.hash_from_path(f)
@@ -1599,7 +1622,7 @@ if __name__ == "__main__":
     elif options.show or options.html_build:
         LM.html_build(files)
         if options.export:
-            LM.html_export(options.export) 
+            LM.html_export(options.export)
         elif options.show:
             LM.html_show()
 
